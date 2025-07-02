@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             .enqueue(object : Callback<CatalogResponse> {
                 override fun onResponse(
                     call: Call<CatalogResponse>,
-                    response: Response<CatalogResponse>
+                    response: Response<CatalogResponse>,
                 ) {
                     val body = response.body()
                     if (response.code() == 200 && body != null) {
@@ -191,6 +192,12 @@ class MainActivity : AppCompatActivity() {
                 ScreenMode.CART -> {
                     binding.catalogContainer.visibility = View.GONE
                     binding.cartContainer.visibility = View.VISIBLE
+
+                    val text = findViewById<TextView>(R.id.cart_empty_title)
+                    if (cartItems.isEmpty())
+                        text.visibility = View.VISIBLE
+                    else
+                        text.visibility = View.GONE
                 }
             }
             currentScreenMode = newScreenMode
