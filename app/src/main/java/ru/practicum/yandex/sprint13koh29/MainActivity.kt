@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -56,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             .enqueue(object : Callback<CatalogResponse> {
                 override fun onResponse(
                     call: Call<CatalogResponse>,
-                    response: Response<CatalogResponse>
+                    response: Response<CatalogResponse>,
                 ) {
                     val body = response.body()
                     if (response.code() == 200 && body != null) {
@@ -100,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         }
-                        cartItemsAdapter.setItems(cartItems)
+                        updateCartItemsAdapter()
                         it.copy(count = 1)
                     } else {
                         it
@@ -138,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             itemAnimator = null
         }
 
-        cartItemsAdapter.setItems(cartItems)
+        updateCartItemsAdapter()
         with(cartItemsAdapter) {
             onAddCountClickListener = OnCartAddCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -148,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
+                updateCartItemsAdapter()
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -158,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
+                updateCartItemsAdapter()
             }
         }
     }
@@ -195,5 +196,13 @@ class MainActivity : AppCompatActivity() {
             }
             currentScreenMode = newScreenMode
         }
+    }
+
+    private fun updateCartItemsAdapter() {
+        cartItemsAdapter.setItems(cartItems)
+        if (cartItems.isEmpty()) {
+            binding.cartEmptyTitle.visibility = View.VISIBLE
+        } else
+            binding.cartEmptyTitle.visibility = View.GONE
     }
 }
