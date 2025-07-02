@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.practicum.yandex.sprint13koh29.CartItem
 import ru.practicum.yandex.sprint13koh29.databinding.ActivityMainBinding
 import java.util.UUID
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
             .enqueue(object : Callback<CatalogResponse> {
                 override fun onResponse(
                     call: Call<CatalogResponse>,
-                    response: Response<CatalogResponse>
+                    response: Response<CatalogResponse>,
                 ) {
                     val body = response.body()
                     if (response.code() == 200 && body != null) {
@@ -101,7 +101,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         }
-                        cartItemsAdapter.setItems(cartItems)
+                        updateCartItemsAdapter()
                         it.copy(count = 1)
                     } else {
                         it
@@ -139,7 +139,7 @@ class MainActivity : AppCompatActivity() {
             itemAnimator = null
         }
 
-        cartItemsAdapter.setItems(cartItems)
+        updateCartItemsAdapter()
         with(cartItemsAdapter) {
             onAddCountClickListener = OnCartAddCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -149,7 +149,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
+                updateCartItemsAdapter()
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
+                updateCartItemsAdapter()
             }
         }
     }
@@ -182,6 +182,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeCurrentScreenMode(newScreenMode: ScreenMode) {
         if (newScreenMode != currentScreenMode) {
+            binding.toolbar.setTitle(newScreenMode.titleResId)
             when (newScreenMode) {
                 ScreenMode.CATALOG -> {
                     binding.catalogContainer.visibility = View.VISIBLE
@@ -195,5 +196,13 @@ class MainActivity : AppCompatActivity() {
             }
             currentScreenMode = newScreenMode
         }
+    }
+
+    private fun updateCartItemsAdapter() {
+        cartItemsAdapter.setItems(cartItems)
+        if (cartItems.isEmpty()) {
+            binding.cartEmptyTitle.visibility = View.VISIBLE
+        } else
+            binding.cartEmptyTitle.visibility = View.GONE
     }
 }
