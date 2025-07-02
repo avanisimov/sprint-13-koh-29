@@ -102,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                             )
                         }
                         cartItemsAdapter.setItems(cartItems)
+                        stateCartEmptyTitle()
                         it.copy(count = 1)
                     } else {
                         it
@@ -140,6 +141,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         cartItemsAdapter.setItems(cartItems)
+        stateCartEmptyTitle()
         with(cartItemsAdapter) {
             onAddCountClickListener = OnCartAddCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -150,6 +152,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 cartItemsAdapter.setItems(cartItems)
+                stateCartEmptyTitle()
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -160,6 +163,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 cartItemsAdapter.setItems(cartItems)
+                stateCartEmptyTitle()
             }
         }
     }
@@ -192,15 +196,16 @@ class MainActivity : AppCompatActivity() {
                 ScreenMode.CART -> {
                     binding.catalogContainer.visibility = View.GONE
                     binding.cartContainer.visibility = View.VISIBLE
-
-                    val text = findViewById<TextView>(R.id.cart_empty_title)
-                    if (cartItems.isEmpty())
-                        text.visibility = View.VISIBLE
-                    else
-                        text.visibility = View.GONE
                 }
             }
             currentScreenMode = newScreenMode
         }
+    }
+
+    private fun stateCartEmptyTitle() {
+        if (cartItems.isEmpty()) {
+            binding.cartEmptyTitle.visibility = View.VISIBLE
+        } else
+            binding.cartEmptyTitle.visibility = View.GONE
     }
 }
