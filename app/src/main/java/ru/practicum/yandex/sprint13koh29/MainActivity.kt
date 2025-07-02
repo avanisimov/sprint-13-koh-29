@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import ru.practicum.yandex.sprint13koh29.CartItem
 import ru.practicum.yandex.sprint13koh29.databinding.ActivityMainBinding
 import java.util.UUID
 
@@ -182,6 +181,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun changeCurrentScreenMode(newScreenMode: ScreenMode) {
         if (newScreenMode != currentScreenMode) {
+            binding.toolbar.setTitle(newScreenMode.titleResId)
             when (newScreenMode) {
                 ScreenMode.CATALOG -> {
                     binding.catalogContainer.visibility = View.VISIBLE
