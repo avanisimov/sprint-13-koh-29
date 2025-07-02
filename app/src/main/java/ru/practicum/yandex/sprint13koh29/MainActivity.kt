@@ -101,8 +101,7 @@ class MainActivity : AppCompatActivity() {
                                 )
                             )
                         }
-                        cartItemsAdapter.setItems(cartItems)
-                        stateCartEmptyTitle()
+                        updateCartItemsAdapter()
                         it.copy(count = 1)
                     } else {
                         it
@@ -140,8 +139,7 @@ class MainActivity : AppCompatActivity() {
             itemAnimator = null
         }
 
-        cartItemsAdapter.setItems(cartItems)
-        stateCartEmptyTitle()
+        updateCartItemsAdapter()
         with(cartItemsAdapter) {
             onAddCountClickListener = OnCartAddCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -151,8 +149,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
-                stateCartEmptyTitle()
+                updateCartItemsAdapter()
             }
             onRemoveCountClickListener = OnCartRemoveCountClickListener { item ->
                 cartItems = cartItems.map {
@@ -162,8 +159,7 @@ class MainActivity : AppCompatActivity() {
                         it
                     }
                 }
-                cartItemsAdapter.setItems(cartItems)
-                stateCartEmptyTitle()
+                updateCartItemsAdapter()
             }
         }
     }
@@ -202,7 +198,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun stateCartEmptyTitle() {
+    private fun updateCartItemsAdapter() {
+        cartItemsAdapter.setItems(cartItems)
         if (cartItems.isEmpty()) {
             binding.cartEmptyTitle.visibility = View.VISIBLE
         } else
