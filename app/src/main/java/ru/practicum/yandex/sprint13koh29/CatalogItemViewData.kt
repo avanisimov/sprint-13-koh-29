@@ -40,6 +40,10 @@ class CatalogItemViewHolder(
             binding.countContainer.visibility = View.VISIBLE
             binding.count.text = viewData.count.toString()
         }
-    }
 
+        if (viewData.count == 0) {
+            binding.countContainer.visibility = View.GONE
+            binding.addToCart.visibility = View.VISIBLE
+        }
+    }
 }
